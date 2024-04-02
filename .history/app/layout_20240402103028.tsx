@@ -19,17 +19,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <div className="flex gap-x-20 w-full overflow-hidden">
-        <div className="sr-only md:not-sr-only">
+        <div className="flex gap-[300px]">
           <SideBar />
-        </div>
-        <div className="w-full h-screen">
-          {/* <Box className="bg-neutral-900 border-none h-screen overflow-x-auto"> */}
+            {/* <nav className="flex w-full">
             <NavMenu />
+            </nav> */}
+          <div>
             {children}
-          {/* </Box> */}
+            </div>
         </div>
-      </div>
       </body>
     </html>
   );

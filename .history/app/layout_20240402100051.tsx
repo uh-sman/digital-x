@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SideBar from "./(routes)/(components)/sidebar";
-import { NavMenu } from "./(routes)/(components)/nav-menu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,17 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <div className="flex gap-x-20 w-full overflow-hidden">
-        <div className="sr-only md:not-sr-only">
+        <div className="flex justify-between">
           <SideBar />
+          <div>{children}</div>
         </div>
-        <div className="w-full h-screen">
-          {/* <Box className="bg-neutral-900 border-none h-screen overflow-x-auto"> */}
-            <NavMenu />
-            {children}
-          {/* </Box> */}
-        </div>
-      </div>
       </body>
     </html>
   );
