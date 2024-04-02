@@ -24,10 +24,8 @@ export default function RootLayout({
           <SideBar />
         </div>
         <div className="w-full h-screen">
-          {/* <Box className="bg-neutral-900 border-none h-screen overflow-x-auto"> */}
             <NavMenu />
             {children}
-          {/* </Box> */}
         </div>
       </div>
       </body>
