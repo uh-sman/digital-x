@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+
+
+model User {
+  id            String         @id @default(cuid()) @map("_id")
+  name          String?
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole       @default(USER)
+  password      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  accounts      Account[]
+  chats         Chat[]
+  organizations Organization[]
+}
+
+model Account {
+  id                String   @id @default(cuid()) @map("_id")
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  userId            String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Organization {
+  id     Int     @id @default(autoincrement())
+  userId String
+  name   String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pinned    Boolean  @default(false)
+  
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomId Int
+  room   Room    @relation(fields: [roomId], references: [id])
+  groupId Int?
+  group   Group? @relation(fields: [groupId], references: [id])
+}
+
+model Room {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  isGroupChat Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  messages    Chat[]
+}
+
+model Invitation {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  accepted  Boolean  @default(false)
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   Int
+}
+
+model Group {
+  id          Int          @id @default(autoincrement())
+  userId      String
+  name        String
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  chats       Chat[]
+  invitations Invitation[]
+}
+// ```
+
+// These corrections should make your Prisma schema syntactically correct and logically consistent.
+
+// Define the Invitation model
+// model Invitation {
+//   id        Int      @id @default(autoincrement())
+//   token     String   @unique
+//   createdAt DateTime @default(now())
+//   expiresAt DateTime
+//   accepted  Boolean  @default(false)
+
+//   // Define relation to the Group model
+//   group Group @relation(fields: [groupId], references: [id])
+
+//   // Define field for the relation
+//   groupId Int
+// }

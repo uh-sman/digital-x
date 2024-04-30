@@ -31,3 +31,9 @@ body {
     text-wrap: balance;
   }
 }
+
+
+.input-to-style{
+  outline: none;
+  border: none;
+}
