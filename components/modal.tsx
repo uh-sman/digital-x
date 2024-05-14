@@ -6,17 +6,23 @@ import { useRouter } from "next/navigation";
 import { ProjectModal } from "@/hooks/modal";
 import db from "@/lib/db"
 import { organization } from "@/actions/get-org";
+import { ChatModal } from "@/hooks/chat-modal";
 interface ModalProps {
-  children?: React.ReactNode,
-  user?: string,
-  userId?: any,
-  title?: string
+  children?: React.ReactNode;
+  user?: string;
+  userId?: any;
+  title?: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onOpen: () => void
+
 }
-const Modal = ({ children, user, userId, title }: ModalProps) => {
+const Modal = ({ children, user, userId, title,isOpen, onClose, onOpen }: ModalProps) => {
   const [close, setClose] = useState(false)
   const { push } = useRouter()
   // Close the modal when the Escape key is pressed
-  const { isOpen, onClose, onOpen } = ProjectModal();
+  // const { isOpen, onClose, onOpen } = ProjectModal();
+  // const { isOpen, onClose, onOpen } = ChatModal();
   // useEffect(() =>{
   //  organization(userId).then((data) => {
   //    if (data?.error) {
@@ -35,9 +41,9 @@ const Modal = ({ children, user, userId, title }: ModalProps) => {
   useEffect(() => {
     const handleEscapeKey = (event: any) => {
       if (event.key === "Escape") {
-        if (close === true) {
+        // if (close === true) {
           onClose();
-        }
+        // }
       }
     };
 
@@ -51,12 +57,13 @@ const Modal = ({ children, user, userId, title }: ModalProps) => {
   }, [isOpen, onClose]);
 
   const handleClose = () => {
-    if (close === true) {
-      onClose()
-    }
-    else{
-      onOpen()
-    }
+    onClose()
+    // if (close === true) {
+    //   onClose()
+    // }
+    // else{
+    //   onOpen()
+    // }
   }
 
   // Close the modal when clicking outside of it

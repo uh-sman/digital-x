@@ -37,24 +37,6 @@ export async function POST(req: Request, res: NextResponse) {
         expiresIn: "1d",
       }
     );
-
-    // Set the cookie with appropriate security options
-    //   res.setHeader('Set-Cookie', cookie.serialize('token', token, {
-    //     httpOnly: true, // Prevent client-side JavaScript access
-    //     secure: process.env.NODE_ENV === 'production', // Only use secure flag in production (HTTPS)
-    //     sameSite: 'lax', // Mitigate CSRF risks (consider 'strict' with additional precautions)
-    //     maxAge: 60 * 60 * 24, // 1 day in seconds (adjust expiration as needed)
-    //     path: '/', // Cookie accessible across all paths on the domain
-    //   }));
-
-    // res.cookies.set("token", token, {
-    //   httpOnly: true, // Prevent client-side JavaScript access
-    //   secure: process.env.NODE_ENV === "production", // Only use secure flag in production (HTTPS)
-    //   sameSite: "strict", // Mitigate CSRF risks (consider 'strict' with additional precautions)
-    //   maxAge: 60 * 60 * 24, // 1 day in seconds (adjust expiration as needed)
-    //   path: "/", // Cookie accessible across all paths on the domain
-    //   priority: "high",
-    // });
     const oneDay = 24 * 60 * 60 * 1000;
 
 

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 // import { SignOutButton } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { FolderIcon } from "@heroicons/react/20/solid";
@@ -18,12 +18,14 @@ import {
   UsersIcon,
 } from "@/app/icons";
 import { UserProfiles } from "./user-profile-small";
+import { UserContext } from "@/hooks/user";
 
 interface AdminSideBarProps {
   name: string;
 }
 const AdminSideBar = ({ name }: AdminSideBarProps) => {
   const pathname = usePathname();
+  const { notification } = useContext(UserContext)
   const { push } = useRouter();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -117,11 +119,13 @@ const AdminSideBar = ({ name }: AdminSideBarProps) => {
                 >
                   <span className="flex gap-3">
                     <Icon />
-                    {isOpen && <span className="hidden lg:block">{title}</span>}
+                    {isOpen && <span className="hidden lg:block">{title}
+                    </span>}
                   </span>
                   {isOpen && title === "Tasks" && (
                     <PlusIcon className="hidden lg:block" />
                   )}
+                 {title === "Notifications" && notification ? notification.length ? <a className="h-6 w-6 rounded-full bg-white text-black text-center">{notification ? notification.length : null}</a> : null : null}
                 </Link>
               </div>
             )

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { socket } from "@/app/socket"
 import Components from "@/app/(routes)/(components)/index";
+// import { getUser } from "@/actions/get-user";
 interface SocketTransport {
   name: string;
 }
@@ -10,6 +11,8 @@ interface SocketTransport {
     const [isConnected, setIsConnected] = useState(false);
     const [transport, setTransport] = useState<string | null>("N/A");
     useEffect(() => {
+   
+
       if (socket.connected) {
         onConnect();
       }

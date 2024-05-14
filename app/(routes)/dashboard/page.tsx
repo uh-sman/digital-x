@@ -1,5 +1,19 @@
 "use client"
-const Dashboard = async () => {
+import { useEffect, useState, useContext } from "react";
+import { getUser } from "@/actions/get-user";
+import { UserContext } from "@/hooks/user";
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean,
+  image: string | null;
+  role: string;
+  createdAt: Date;
+  // other properties
+}
+const Dashboard = () => {
+  const { user } = useContext(UserContext)
 
   const currentDate = new Date().toDateString()
   const stats = [
@@ -19,9 +33,9 @@ const Dashboard = async () => {
   return (
     <div className="py-14 px-8 space-y-8">
       <header>
-        <h1 className="font-bold text-2xl pb-4">Welcome back, 
+        <h1 className="font-bold text-2xl pb-4 pr-2">Welcome back, 
         {/* put User name */}
-        {/* {user?.firstName} */}
+        <span> { user ? user?.name : ""}</span>
         !</h1>
         <p className="text-gray-500">Here are your stats for Today {currentDate}</p>
       </header>
@@ -46,6 +60,3 @@ const Dashboard = async () => {
 export default Dashboard;
 
 
-<div className="">
-                
-</div>

@@ -19,26 +19,27 @@ enum UserRole {
   SUPERADMIN
 }
 
-
-
 model User {
-  id            String         @id @default(cuid()) @map("_id")
-  name          String?
-  email         String?        @unique
-  emailVerified DateTime?
-  image         String?
-  role          UserRole       @default(USER)
-  password      String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-
-  accounts      Account[]
-  chats         Chat[]
-  organizations Organization[]
+  id              String          @id @default(cuid()) @map("_id")
+  name            String?
+  email           String?         @unique
+  emailVerified   DateTime?
+  image           String?
+  role            UserRole        @default(USER)
+  password        String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  accounts        Account[]
+  chats           Chat[]     
+  organizations   Organization[]
+  sentBy          FriendRequest[]   @relation("sentBy")
+  receivedBy      FriendRequest[] @relation("sentTo")
+  sentChats       PersonalChat[]  @relation("Sender")
+  receivedChats   PersonalChat[]  @relation("Receiver")
 }
 
 model Account {
-  id                String   @id @default(cuid()) @map("_id")
+  id                String      @id @default(cuid()) @map("_id")
   type              String
   provider          String
   providerAccountId String
@@ -50,60 +51,83 @@ model Account {
   id_token          String?
   session_state     String?
   userId            String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Organization {
-  id     Int     @id @default(autoincrement())
-  userId String
-  name   String
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       Int         @id @default(autoincrement())
+  name     String
+  userId   String
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)  
 }
 
 model Chat {
-  id        Int      @id @default(autoincrement())
-  userId    String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  pinned    Boolean  @default(false)
-  
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  roomId Int
-  room   Room    @relation(fields: [roomId], references: [id])
-  groupId Int?
-  group   Group? @relation(fields: [groupId], references: [id])
+  id         Int        @id @default(autoincrement())
+  userId     String
+  content    String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  pinned     Boolean    @default(false)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomId     Int?
+  room       Room?      @relation(fields: [roomId], references: [id])
+  groupId    Int?
+  group      Group?     @relation(fields: [groupId], references: [id])
+}
+
+model FriendRequest {
+  id           Int      @id @default(autoincrement())
+  senderId     String   @unique
+  receiverId   String
+  sender       User     @relation(name: "sentBy", fields: [senderId], references: [id])
+  receiver     User     @relation(name: "sentTo", fields: [receiverId], references: [id])
+  createdAt    DateTime @default(now())
 }
 
 model Room {
-  id          Int      @id @default(autoincrement())
-  name        String?
-  isGroupChat Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  messages    Chat[]
+  id           Int       @id @default(autoincrement())
+  name         String?
+  isGroupChat  Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  chats        Chat[]
+}
+
+model PersonalChat {
+  id              Int        @id @default(autoincrement())
+  senderId        String
+  receiverId      String
+  sender          User       @relation(name: "Sender",fields: [senderId], references: [id])
+  receiver        User       @relation(name: "Receiver",fields: [receiverId], references: [id])
+  lastMessage     String?
+  unreadCount1    Int
+  unreadCount2    Int
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
 
 model Invitation {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-  accepted  Boolean  @default(false)
-  group     Group    @relation(fields: [groupId], references: [id])
-  groupId   Int
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  accepted    Boolean   @default(false)
+  group       Group     @relation(fields: [groupId], references: [id])
+  groupId     Int
 }
 
 model Group {
-  id          Int          @id @default(autoincrement())
-  userId      String
-  name        String
-  description String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  chats       Chat[]
-  invitations Invitation[]
+  id            Int         @id @default(autoincrement())
+  userId        String
+  name          String
+  description   String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  chats         Chat[]
+  invitations   Invitation[]
 }
+
+
 // ```
 
 // These corrections should make your Prisma schema syntactically correct and logically consistent.

@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/card";
 import { Hero } from "@/components/hero";
 import { Navbar } from "@/components/navbar";

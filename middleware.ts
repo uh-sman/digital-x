@@ -33,12 +33,16 @@ export function middleware(request: NextRequest) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
-
+    
+    if (isPublicRoute) {
+      return null
+    }
     // return null;
 
     if (!isLoggedIn && !isPublicRoute) { 
       return Response.redirect(new URL("/", nextUrl))
     }
+
 
   
   }
